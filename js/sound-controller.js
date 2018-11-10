@@ -1,8 +1,8 @@
 import { playNote } from "./sound";
 import { sinEaseInOut, slurp, clamp } from "./util";
 
-const NOTE_LENGTH = 1;
-const NUM_NOTES = 3;
+const NOTE_LENGTH = 0.5;
+const NUM_NOTES = 5;
 const FADE_LENGTH = 0.5;
 
 const WIDTH = 200;
@@ -10,18 +10,23 @@ const HEIGHT = 100;
 
 export default class SoundController {
 
-	constructor(audioContext, startNoteIndex) {
+	constructor(audioContext, startNote = 1) {
         this.audioContext = audioContext;
-        this.startNoteIndex = startNoteIndex;
+        this.startNote = startNote;
         this.animAmt = 0;
         this.done = false;
     }
     
     start() {
         this.animAmt = 0;
-        playNote(this.audioContext, 0, {delay: 0 * NOTE_LENGTH});
-        playNote(this.audioContext, 4, {delay: 1 * NOTE_LENGTH});
-        playNote(this.audioContext, 7, {delay: 2 * NOTE_LENGTH});
+
+        for (let i = 0; i < NUM_NOTES; i ++) {
+            playNote({
+                audioContext: this.audioContext,
+                scaleNote: this.startNote + 2 * i,
+                delay: i * NOTE_LENGTH
+            });
+        }
     }
 
 	/**
@@ -38,8 +43,8 @@ export default class SoundController {
 	 * @param {CanvasRenderingContext2D} context 
 	 */
 	render(context) {
-        let noteAmt = this.animAmt % 1;
-        let noteIndex = Math.floor(this.animAmt);
+        let noteAmt = (this.animAmt / NOTE_LENGTH) % 1;
+        let noteIndex = Math.floor(this.animAmt / NOTE_LENGTH);
         let fadeAmt = clamp((this.animAmt - (NUM_NOTES - 1) * NOTE_LENGTH) / FADE_LENGTH, 0, 1);
         context.globalAlpha = 1 - fadeAmt;
 

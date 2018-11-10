@@ -1,16 +1,24 @@
-/**
- * 
- * @param {AudioContext} audioContext 
- * @param {Number} note 
- */
-export function playNote(audioContext, noteIndex, {decay=1, delay=0}) {
+
+const C_MAJOR_SCALE = [
+    0, 2, 4, 5, 7, 9, 11,
+];
+const OCTAVE_AMOUNT = 12;
+
+export function playNote({audioContext, note = null, scaleNote = null, decay=2, delay=0, volume=1}) {
+    if (note == null && scaleNote == null) {
+        throw new Error('Must specify note or scaleNote');
+    }
+    if (note == null) {
+        note = getNoteFromScaleNote(scaleNote);
+    }
+    const noteFrequency = getNoteFrequency(note);
+
     setTimeout(() => {
         const oscillator = audioContext.createOscillator();
-        const frequency = getNoteFrequency(noteIndex);
-        oscillator.frequency.value = frequency;
+        oscillator.frequency.value = noteFrequency;
         const gainNode = audioContext.createGain();
-        gainNode.gain.setValueAtTime(0.5, audioContext.currentTime);
-        gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + decay);
+        gainNode.gain.setValueAtTime(volume, audioContext.currentTime);
+        gainNode.gain.exponentialRampToValueAtTime(0.0001, audioContext.currentTime + decay);
     
         oscillator.connect(gainNode);
         gainNode.connect(audioContext.destination);
@@ -21,10 +29,20 @@ export function playNote(audioContext, noteIndex, {decay=1, delay=0}) {
     }, 1000 * delay);
 }
 
+export function getNoteFromScaleNote(scaleNote) {
+    const zeroIndex = (scaleNote - 1);
+    const octave = Math.floor(zeroIndex / 8);
+    let octaveNote = zeroIndex % 8;
+    if (octaveNote < 0) {
+        octaveNote += 8;
+    }
+    return octave * OCTAVE_AMOUNT + C_MAJOR_SCALE[octaveNote];
+}
+
 /**
  * 
  * @param {Number} index Index compared to middle C
  */
-function getNoteFrequency(index) {
+export function getNoteFrequency(index) {
     return 440 * Math.pow(2, (index + 3) / 12);
 }
