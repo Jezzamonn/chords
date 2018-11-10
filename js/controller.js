@@ -8,7 +8,9 @@ export default class Controller {
 	constructor(audioContext) {
 		this.audioContext = audioContext;
 		this.animAmt = 1;
-		this.period = 8;
+		this.period = 4;
+
+		this.loopCount = 0;
 
 		this.subControllers = [];
 	}
@@ -24,11 +26,16 @@ export default class Controller {
 
 		this.animAmt += dt / this.period;
 		if (this.animAmt >= 1) {
-			const soundController = new SoundController(this.audioContext, 0);
-			soundController.start();
-			this.subControllers.push(soundController);
+			this.onLoop();
+			this.loopCount ++;
 		}
 		this.animAmt %= 1;
+	}
+
+	onLoop() {
+		const soundController = new SoundController(this.audioContext, this.loopCount);
+		soundController.start();
+		this.subControllers.push(soundController);
 	}
 
 	/**
