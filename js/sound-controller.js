@@ -1,8 +1,9 @@
 import { playNote } from "./sound";
-import { sinEaseInOut, slurp } from "./util";
+import { sinEaseInOut, slurp, clamp } from "./util";
 
 const NOTE_LENGTH = 1;
 const NUM_NOTES = 3;
+const FADE_LENGTH = 1;
 
 const WIDTH = 200;
 const HEIGHT = 100;
@@ -13,6 +14,7 @@ export default class SoundController {
         this.audioContext = audioContext;
         this.startNoteIndex = startNoteIndex;
         this.animAmt = 0;
+        this.done = false;
     }
     
     start() {
@@ -27,6 +29,9 @@ export default class SoundController {
 	 */
 	update(dt) {
         this.animAmt += dt;
+        if (this.animAmt > NOTE_LENGTH * NUM_NOTES + FADE_LENGTH) {
+            this.done = true;
+        }
 	}
 
 	/**
@@ -35,6 +40,8 @@ export default class SoundController {
 	render(context) {
         let noteAmt = this.animAmt % 1;
         let noteIndex = Math.floor(this.animAmt);
+        let fadeAmt = clamp((this.animAmt - NUM_NOTES * NOTE_LENGTH) / FADE_LENGTH, 0, 1);
+        context.globalAlpha = 1 - fadeAmt;
 
         const bounceAmt = 1 - (4 * noteAmt * (1 - noteAmt));
 
@@ -45,6 +52,7 @@ export default class SoundController {
         context.fillStyle = 'blue';
         context.arc(x, y, 2, 0, 2 * Math.PI);
         context.fill();
+        context.globalAlpha = 1;
 	}
 
 }

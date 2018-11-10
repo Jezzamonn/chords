@@ -17,6 +17,7 @@ export default class Controller {
 	 * @param {Number} dt Time in seconds since last update
 	 */
 	update(dt) {
+		this.subControllers = this.subControllers.filter(controller => !controller.done);
 		for (const subController of this.subControllers) {
 			subController.update(dt);
 		}
