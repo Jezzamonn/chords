@@ -1,8 +1,9 @@
 import { playNote } from "./sound";
 import { sinEaseInOut, slurp, clamp } from "./util";
 
+const NOTES = [0, 2, 4, 6, 7];
 const NOTE_LENGTH = 0.5;
-const NUM_NOTES = 5;
+const NUM_NOTES = NOTES.length;
 const VISUAL_FADE_LENGTH = 0.5;
 
 // Audio wise
@@ -28,7 +29,7 @@ export default class SoundController {
         for (let i = 0; i < NUM_NOTES; i ++) {
             playNote({
                 audioContext: this.audioContext,
-                scaleNote: this.startNote + 2 * i,
+                scaleNote: this.startNote + NOTES[i],
                 delay: i * NOTE_LENGTH,
                 volume: START_VOLUME * Math.pow(VOLUME_FADE_AMT, i)
             });

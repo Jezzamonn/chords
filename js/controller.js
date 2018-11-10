@@ -33,7 +33,7 @@ export default class Controller {
 	}
 
 	onLoop() {
-		const soundController = new SoundController(this.audioContext, this.loopCount);
+		const soundController = new SoundController(this.audioContext, -this.loopCount);
 		soundController.start();
 		this.subControllers.push(soundController);
 	}
