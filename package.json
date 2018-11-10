@@ -13,7 +13,8 @@
     "watch": "npm-watch webpack",
     "reload": "reload -b -w build",
     "gif": "node build/gif-gen.bundle.js",
-    "watch-gif": "npm-watch gif"
+    "watch-gif": "npm-watch gif",
+    "test": "jest"
   },
   "author": "Jezzamon",
   "license": "ISC",
@@ -35,6 +36,7 @@
     "gif.js.optimized": "^1.0.1",
     "gifencoder": "^1.1.0",
     "gifsicle": "^3.0.4",
+    "jest": "^23.6.0",
     "single-line-log": "^1.1.2",
     "string-format": "^2.0.0"
   }

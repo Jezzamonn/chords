@@ -30,11 +30,10 @@ export function playNote({audioContext, note = null, scaleNote = null, decay=2, 
 }
 
 export function getNoteFromScaleNote(scaleNote) {
-    const zeroIndex = (scaleNote - 1);
-    const octave = Math.floor(zeroIndex / 8);
-    let octaveNote = zeroIndex % 8;
+    const octave = Math.floor(scaleNote / 7);
+    let octaveNote = scaleNote % 7;
     if (octaveNote < 0) {
-        octaveNote += 8;
+        octaveNote += 7;
     }
     return octave * OCTAVE_AMOUNT + C_MAJOR_SCALE[octaveNote];
 }
