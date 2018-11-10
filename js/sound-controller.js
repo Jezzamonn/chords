@@ -3,7 +3,7 @@ import { sinEaseInOut, slurp, clamp } from "./util";
 
 const NOTE_LENGTH = 1;
 const NUM_NOTES = 3;
-const FADE_LENGTH = 1;
+const FADE_LENGTH = 0.5;
 
 const WIDTH = 200;
 const HEIGHT = 100;
@@ -29,7 +29,7 @@ export default class SoundController {
 	 */
 	update(dt) {
         this.animAmt += dt;
-        if (this.animAmt > NOTE_LENGTH * NUM_NOTES + FADE_LENGTH) {
+        if (this.animAmt > (NUM_NOTES - 1) * NOTE_LENGTH + FADE_LENGTH) {
             this.done = true;
         }
 	}
@@ -40,7 +40,7 @@ export default class SoundController {
 	render(context) {
         let noteAmt = this.animAmt % 1;
         let noteIndex = Math.floor(this.animAmt);
-        let fadeAmt = clamp((this.animAmt - NUM_NOTES * NOTE_LENGTH) / FADE_LENGTH, 0, 1);
+        let fadeAmt = clamp((this.animAmt - (NUM_NOTES - 1) * NOTE_LENGTH) / FADE_LENGTH, 0, 1);
         context.globalAlpha = 1 - fadeAmt;
 
         const bounceAmt = 1 - (4 * noteAmt * (1 - noteAmt));

@@ -23,8 +23,8 @@ export function playNote(audioContext, noteIndex, {decay=1, delay=0}) {
 
 /**
  * 
- * @param {Number} index Index compared to middle A
+ * @param {Number} index Index compared to middle C
  */
 function getNoteFrequency(index) {
-    return 440 * Math.pow(2, index / 12);
+    return 440 * Math.pow(2, (index + 3) / 12);
 }
