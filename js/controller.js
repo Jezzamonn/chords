@@ -1,22 +1,42 @@
+import { playNote } from "./sound";
+import SoundController from "./sound-controller";
+
+const NOTE_LENGTH = 1;
+
 export default class Controller {
 
-	constructor() {
-		this.animAmt = 0;
-		this.period = 5;
+	constructor(audioContext) {
+		this.audioContext = audioContext;
+		this.animAmt = 1;
+		this.period = 8;
+
+		this.subControllers = [];
 	}
 
 	/**
 	 * @param {Number} dt Time in seconds since last update
 	 */
 	update(dt) {
+		for (const subController of this.subControllers) {
+			subController.update(dt);
+		}
+
 		this.animAmt += dt / this.period;
+		if (this.animAmt >= 1) {
+			const soundController = new SoundController(this.audioContext, 0);
+			soundController.start();
+			this.subControllers.push(soundController);
+		}
+		this.animAmt %= 1;
 	}
 
 	/**
 	 * @param {CanvasRenderingContext2D} context 
 	 */
 	render(context) {
-		// TODO: Some rendering logic
+		for (const subController of this.subControllers) {
+			subController.render(context);
+		}
 	}
 
 }

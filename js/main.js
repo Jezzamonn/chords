@@ -3,6 +3,8 @@ import Controller from './controller.js';
 let canvas = document.getElementById('canvas');
 let context = canvas.getContext('2d');
 
+let audioContext = new AudioContext();
+
 // Currently assuming square proportions.
 const SIZE = 500;
 
@@ -12,7 +14,7 @@ let controller;
 
 function init() {
 	lastTime = Date.now();
-	controller = new Controller();
+	controller = new Controller(audioContext);
 
 	handleResize();
 	// Set up event listeners.
