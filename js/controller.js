@@ -28,8 +28,8 @@ export default class Controller {
 		if (this.animAmt >= 1) {
 			this.onLoop();
 			this.loopCount ++;
+			this.animAmt = 0;
 		}
-		this.animAmt %= 1;
 	}
 
 	onLoop() {
